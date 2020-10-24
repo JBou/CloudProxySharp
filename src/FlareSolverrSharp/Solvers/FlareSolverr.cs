@@ -29,6 +29,7 @@ namespace FlareSolverrSharp.Solvers
         public async Task<FlareSolverrResponse> Solve(HttpRequestMessage request)
         {
             FlareSolverrResponse result = null;
+            Uri originalUri = request.RequestUri;
 
             await Locker.LockAsync(async () =>
             {
@@ -36,7 +37,12 @@ namespace FlareSolverrSharp.Solvers
                 try
                 {
                     _httpClient = new HttpClient();
+                    var builder = new UriBuilder(originalUri);
+                    builder.Path = String.Empty;
+                    request.RequestUri = builder.Uri;
+
                     response = await _httpClient.PostAsync(_flareSolverrUri, GenerateFlareSolverrRequest(request));
+                    request.RequestUri = originalUri;
                 }
                 catch (HttpRequestException e)
                 {

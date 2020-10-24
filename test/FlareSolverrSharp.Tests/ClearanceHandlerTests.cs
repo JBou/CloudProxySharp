@@ -12,6 +12,7 @@ namespace FlareSolverrSharp.Tests
     public class ClearanceHandlerTests
     {
         private readonly Uri _protectedUri = new Uri("https://dailyiptvlist.com/");
+        private readonly Uri _protectedDownloadUri = new Uri("https://dailyiptvlist.com/dl/de-m3uplaylist-2020-10-23-1.m3u");
 
         [TestMethod]
         public async Task SolveOk()
@@ -39,6 +40,20 @@ namespace FlareSolverrSharp.Tests
 
             var client = new HttpClient(handler);
             var response = await client.GetAsync(_protectedUri);
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task SolveOkCloudflareDownload()
+        {
+            var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
+            {
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
+                MaxTimeout = 60000
+            };
+
+            var client = new HttpClient(handler);
+            var response = await client.GetAsync(_protectedDownloadUri);
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }
         
