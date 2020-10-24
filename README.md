@@ -1,22 +1,22 @@
-FlareSolverrSharp
+CloudProxySharp
 ==================
-[![NuGet](https://img.shields.io/nuget/v/FlareSolverrSharp.svg?maxAge=60)](https://www.nuget.org/packages/FlareSolverrSharp)
+[![NuGet](https://img.shields.io/nuget/v/CloudProxySharp.svg?maxAge=60)](https://www.nuget.org/packages/CloudProxySharp)
 
-FlareSolverr .Net DelegatingHandler / interceptor.
+CloudProxySharp .Net DelegatingHandler / interceptor.
 
-[FlareSolverr](https://github.com/ngosang/FlareSolverr) is a proxy server to bypass Cloudflare protection.
+[CloudProxySharp](https://github.com/JBou/CloudProxySharp) is a proxy server to bypass Cloudflare protection.
 
 :warning: This project is in beta state. Some things may not work and the API can change at any time.
 
 # Installation
 Full-Featured library:
 
-`PM> Install-Package FlareSolverr`
+`PM> Install-Package CloudProxySharp`
 
 # Dependencies
 - [.NET Standard 1.3](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard1.3.md)
 
-You need a running [FlareSolverr](https://github.com/ngosang/FlareSolverr) service.
+You need a running [CloudProxy](https://github.com/NoahCardoza/CloudProxy) service.
 
 # Issues
 Cloudflare regularly modifies their protection challenge and improves their bot detection capabilities.
@@ -50,17 +50,17 @@ var content = await client.GetStringAsync("https://uam.hitmehard.fun/HIT");
 Console.WriteLine(content);
 ```
 
-**Full example [here](https://github.com/ngosang/FlareSolverrSharp/tree/master/sample/FlareSolverrSharp.Sample)**
+**Full example [here](https://github.com/JBou/CloudProxySharp/tree/master/sample/CloudProxySharp.Sample)**
 
 # Options
-### FlareSolverr Service API
-You have to set the FlareSolverr service API in the ClearanceHandler constructor. If you set an empty or null endpoint,
-FlareSolverrSharp will be able to detect challenges, but it will not be able to solve them.
+### CloudProxy Service API
+You have to set the CloudProxy service API in the ClearanceHandler constructor. If you set an empty or null endpoint,
+CloudProxySharp will be able to detect challenges, but it will not be able to solve them.
 
 Example: http://localhost:8191/
 
 ### UserAgent
-The User-Agent which will be used across this session. If you didn't set it, the default FlareSolverr User-Agent will be used.
+The User-Agent which will be used across this session. If you didn't set it, the default CloudProxy User-Agent will be used.
 
 **User-Agent must be the same as the one used to solve the challenge, otherwise Cloudflare will flag you as a bot.**
 
@@ -72,3 +72,7 @@ Max timeout to solve the challenge.
 **MaxTimeout should be greater than 15000 (15 seconds) because starting the web browser and solving the challenge takes time.**
 
 Example: 60000
+
+# Credits
+This work is based on [FlareSolverrSharp](https://github.com/ngosang/FlareSolverrSharp) by [Diego Heras (ngosang)](https://github.com/ngosang)  
+Huge thanks go out to him!

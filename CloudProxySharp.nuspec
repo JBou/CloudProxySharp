@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package>
+  <metadata>
+    <id>CloudProxySharp</id>
+    <version>1.0.0</version>
+    <authors>Gabriel Patzleiner (JBou)</authors>
+    <owners>Gabriel Patzleiner (JBou)</owners>
+    <description>CloudProxy .Net / Proxy server to bypass Cloudflare protection.</description>
+    <tags>cloudproxy, cloudflare, solver, bypass, protection, solving, library, cloudflaresolver, flaresolverr, flaresolver, delegatinghandler, recaptcha, captcha, javascript, challenge, utilities</tags>
+    <repository url="https://github.com/JBou/CloudProxySharp" />
+    <projectUrl>https://github.com/JBou/CloudProxySharp</projectUrl>
+    <licenseUrl>https://github.com/JBou/CloudProxySharp/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="src/CloudProxySharp/bin/Release/netstandard1.3/CloudProxySharp.dll" target="lib/netstandard1.3"/>
+  </files>
+</package>

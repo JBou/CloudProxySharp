@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 
-namespace FlareSolverrSharp.Types
+namespace CloudProxySharp.Types
 {
-    public class FlareSolverrResponse
+    public class CloudProxyResponse
     {
         public string Status;
         public string Message;

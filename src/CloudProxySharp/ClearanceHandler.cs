@@ -2,24 +2,24 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FlareSolverrSharp.Constants;
-using FlareSolverrSharp.Exceptions;
-using FlareSolverrSharp.Extensions;
-using FlareSolverrSharp.Solvers;
-using FlareSolverrSharp.Types;
+using CloudProxySharp.Constants;
+using CloudProxySharp.Exceptions;
+using CloudProxySharp.Extensions;
+using CloudProxySharp.Solvers;
+using CloudProxySharp.Types;
 using Cookie = System.Net.Cookie;
 
-namespace FlareSolverrSharp
+namespace CloudProxySharp
 {
     /// <summary>
     /// A HTTP handler that transparently manages Cloudflare's protection bypass.
     /// </summary>
     public class ClearanceHandler : DelegatingHandler
     {
-        private readonly FlareSolverr _flareSolverr;
+        private readonly CloudProxy _cloudProxy;
 
         /// <summary>
-        /// The User-Agent which will be used accross this session (null means default FlareSolverr User-Agent).
+        /// The User-Agent which will be used accross this session (null means default CloudProxy User-Agent).
         /// </summary>
         public string UserAgent = null;
 
@@ -33,14 +33,14 @@ namespace FlareSolverrSharp
         /// <summary>
         /// Creates a new instance of the <see cref="ClearanceHandler"/>.
         /// </summary>
-        /// <param name="flareSolverrApiUrl">FlareSolverr API URL. If null or empty it will detect the challenges, but
+        /// <param name="cloudProxyApiUrl">CloudProxy API URL. If null or empty it will detect the challenges, but
         /// they will not be solved. Example: "http://localhost:8191/"</param>
-        public ClearanceHandler(string flareSolverrApiUrl)
+        public ClearanceHandler(string cloudProxyApiUrl)
             : base(new HttpClientHandler())
         {
-            if (!string.IsNullOrWhiteSpace(flareSolverrApiUrl))
+            if (!string.IsNullOrWhiteSpace(cloudProxyApiUrl))
             {
-                _flareSolverr = new FlareSolverr(flareSolverrApiUrl)
+                _cloudProxy = new CloudProxy(cloudProxyApiUrl)
                 {
                     MaxTimeout = MaxTimeout
                 };
@@ -64,22 +64,22 @@ namespace FlareSolverrSharp
             // Detect if there is a challenge in the response
             if (ChallengeDetector.IsClearanceRequired(response))
             {
-                if (_flareSolverr == null)
-                    throw new FlareSolverrException("Challenge detected but CloudProxy is not configured");
+                if (_cloudProxy == null)
+                    throw new CloudProxyException("Challenge detected but CloudProxy is not configured");
 
-                // Resolve the challenge using FlareSolverr API
-                var flareSolverrResponse = await _flareSolverr.Solve(request);
+                // Resolve the challenge using CloudProxy API
+                var cloudProxyResponse = await _cloudProxy.Solve(request);
 
-                // Change the cookies in the original request with the cookies provided by FlareSolverr
-                InjectCookies(request, flareSolverrResponse);
+                // Change the cookies in the original request with the cookies provided by CloudProxy
+                InjectCookies(request, cloudProxyResponse);
                 response = await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
 
                 // Detect if there is a challenge in the response
                 if (ChallengeDetector.IsClearanceRequired(response))
-                    throw new FlareSolverrException("The cookies provided by CloudProxy are not valid");
+                    throw new CloudProxyException("The cookies provided by CloudProxy are not valid");
 
-                // Add the "Set-Cookie" header in the response with the cookies provided by FlareSolverr
-                InjectSetCookieHeader(response, flareSolverrResponse);
+                // Add the "Set-Cookie" header in the response with the cookies provided by CloudProxy
+                InjectSetCookieHeader(response, cloudProxyResponse);
             }
 
             return response;
@@ -95,9 +95,9 @@ namespace FlareSolverrSharp
             request.Headers.Add(HttpHeaders.UserAgent, UserAgent);
         }
 
-        private void InjectCookies(HttpRequestMessage request, FlareSolverrResponse flareSolverrResponse)
+        private void InjectCookies(HttpRequestMessage request, CloudProxyResponse cloudProxyResponse)
         {
-            var rCookies = flareSolverrResponse.Solution.Cookies;
+            var rCookies = cloudProxyResponse.Solution.Cookies;
             if (!rCookies.Any())
                 return;
             var rCookiesList = rCookies.Select(x => x.Name).ToList();
@@ -118,9 +118,9 @@ namespace FlareSolverrSharp
             }
         }
 
-        private void InjectSetCookieHeader(HttpResponseMessage response, FlareSolverrResponse flareSolverrResponse)
+        private void InjectSetCookieHeader(HttpResponseMessage response, CloudProxyResponse cloudProxyResponse)
         {
-            var rCookies = flareSolverrResponse.Solution.Cookies;
+            var rCookies = cloudProxyResponse.Solution.Cookies;
             if (!rCookies.Any())
                 return;
 

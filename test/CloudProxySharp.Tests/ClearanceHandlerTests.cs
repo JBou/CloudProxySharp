@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using FlareSolverrSharp.Exceptions;
+using CloudProxySharp.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FlareSolverrSharp.Tests
+namespace CloudProxySharp.Tests
 {
     [TestClass]
     public class ClearanceHandlerTests
@@ -18,7 +18,7 @@ namespace FlareSolverrSharp.Tests
         public async Task SolveOk()
         {
             var uri = new Uri("https://www.google.com/");
-            var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
+            var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
                 UserAgent = null,
                 MaxTimeout = 60000
@@ -32,7 +32,7 @@ namespace FlareSolverrSharp.Tests
         [TestMethod]
         public async Task SolveOkCloudflare()
         {
-            var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
+            var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
                 MaxTimeout = 60000
@@ -46,7 +46,7 @@ namespace FlareSolverrSharp.Tests
         [TestMethod]
         public async Task SolveOkCloudflareDownload()
         {
-            var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
+            var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
                 UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
                 MaxTimeout = 60000
@@ -61,7 +61,7 @@ namespace FlareSolverrSharp.Tests
         public async Task SolveError()
         {
             var uri = new Uri("https://www.google.bad1/");
-            var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
+            var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
                 UserAgent = null,
                 MaxTimeout = 60000
@@ -98,7 +98,7 @@ namespace FlareSolverrSharp.Tests
                 await client.GetAsync(_protectedUri);
                 Assert.Fail("Exception not thrown");
             }
-            catch (FlareSolverrException e)
+            catch (CloudProxyException e)
             {
                 Assert.IsTrue(e.Message.Contains("Error connecting to CloudProxy server"));
             }
@@ -123,9 +123,9 @@ namespace FlareSolverrSharp.Tests
                 await client.GetAsync(_protectedUri);
                 Assert.Fail("Exception not thrown");
             }
-            catch (FlareSolverrException e)
+            catch (CloudProxyException e)
             {
-                Assert.IsTrue(e.Message.Contains("Challenge detected but FlareSolverr is not configured"));
+                Assert.IsTrue(e.Message.Contains("Challenge detected but CloudProxy is not configured"));
             }
             catch (Exception e)
             {

@@ -1,5 +1,5 @@
 ﻿
-namespace FlareSolverrSharp.Sample
+namespace CloudProxySharp.Sample
 {
     static class Program
     {

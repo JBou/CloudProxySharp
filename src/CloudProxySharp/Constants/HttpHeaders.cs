@@ -1,4 +1,4 @@
-﻿namespace FlareSolverrSharp.Constants
+﻿namespace CloudProxySharp.Constants
 {
     public static class HttpHeaders
     {

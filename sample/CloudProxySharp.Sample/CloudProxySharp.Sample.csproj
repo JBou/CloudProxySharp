@@ -3,11 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>FlareSolverrSharp.Sample</RootNamespace>
+    <RootNamespace>CloudProxySharp.Sample</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FlareSolverrSharp\FlareSolverrSharp.csproj" />
+    <ProjectReference Include="..\..\src\CloudProxySharp\CloudProxySharp.csproj" />
   </ItemGroup>
 
 </Project>

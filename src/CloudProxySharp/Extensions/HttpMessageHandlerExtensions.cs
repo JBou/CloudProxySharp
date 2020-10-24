@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 
-namespace FlareSolverrSharp.Extensions
+namespace CloudProxySharp.Extensions
 {
     internal static class HttpMessageHandlerExtensions
     {

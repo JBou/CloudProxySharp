@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace FlareSolverrSharp.Sample
+namespace CloudProxySharp.Sample
 {
     public static class ClearanceHandlerSample
     {

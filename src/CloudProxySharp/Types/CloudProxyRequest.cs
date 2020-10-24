@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace FlareSolverrSharp.Types
+namespace CloudProxySharp.Types
 {
-    public class FlareSolverrRequest
+    public class CloudProxyRequest
     {
         [JsonProperty("cmd")]
         public string Command = "request.get";
