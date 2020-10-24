@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace FlareSolverrSharp.Tests
     [TestClass]
     public class ClearanceHandlerTests
     {
-        private readonly Uri _protectedUri = new Uri("http://www.bteye.org/");
+        private readonly Uri _protectedUri = new Uri("https://dailyiptvlist.com/");
 
         [TestMethod]
         public async Task SolveOk()
@@ -32,7 +33,7 @@ namespace FlareSolverrSharp.Tests
         {
             var handler = new ClearanceHandler(Settings.FlareSolverrApiUrl)
             {
-                UserAgent = "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0",
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
                 MaxTimeout = 60000
             };
 
@@ -84,7 +85,7 @@ namespace FlareSolverrSharp.Tests
             }
             catch (FlareSolverrException e)
             {
-                Assert.IsTrue(e.Message.Contains("Error connecting to FlareSolverr server"));
+                Assert.IsTrue(e.Message.Contains("Error connecting to CloudProxy server"));
             }
             catch (Exception e)
             {

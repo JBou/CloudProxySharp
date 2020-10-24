@@ -1,6 +1,9 @@
 ﻿
 // ReSharper disable UnassignedField.Global
 // ReSharper disable ClassNeverInstantiated.Global
+
+using System.Collections.Generic;
+
 namespace FlareSolverrSharp.Types
 {
     public class FlareSolverrResponse
@@ -16,6 +19,8 @@ namespace FlareSolverrSharp.Types
     public class Solution
     {
         public string Url;
+        public int Status;
+        public Dictionary<string, string> Headers;
         public string Response;
         public Cookie[] Cookies;
         public string UserAgent;

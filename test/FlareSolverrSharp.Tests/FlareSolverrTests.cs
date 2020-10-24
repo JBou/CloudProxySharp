@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FlareSolverrSharp.Constants;
@@ -27,8 +28,10 @@ namespace FlareSolverrSharp.Tests
             Assert.AreEqual("1.0.0", flareSolverrResponse.Version);
 
             Assert.AreEqual("https://www.google.com/", flareSolverrResponse.Solution.Url);
+            Assert.AreEqual(flareSolverrResponse.Solution.Status, HttpStatusCode.OK);
             Assert.IsTrue(flareSolverrResponse.Solution.Response.Contains("<title>Google</title>"));
             Assert.IsTrue(flareSolverrResponse.Solution.Cookies.Any());
+            Assert.IsTrue(flareSolverrResponse.Solution.Headers.Any());
             Assert.IsTrue(flareSolverrResponse.Solution.UserAgent.Contains(" Firefox/"));
 
             var firstCookie = flareSolverrResponse.Solution.Cookies.First();

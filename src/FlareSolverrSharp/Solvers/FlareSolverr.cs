@@ -40,7 +40,7 @@ namespace FlareSolverrSharp.Solvers
                 }
                 catch (HttpRequestException e)
                 {
-                    throw new FlareSolverrException("Error connecting to FlareSolverr server: " + e);
+                    throw new FlareSolverrException("Error connecting to CloudProxy server: " + e);
                 }
                 catch (Exception e)
                 {
@@ -58,7 +58,7 @@ namespace FlareSolverrSharp.Solvers
                 }
                 catch (Exception)
                 {
-                    throw new FlareSolverrException("Error parsing response, check FlareSolverr version. Response: " + resContent);
+                    throw new FlareSolverrException("Error parsing response, check CloudProxy version. Response: " + resContent);
                 }
 
                 if (response.StatusCode != HttpStatusCode.OK)
@@ -72,7 +72,6 @@ namespace FlareSolverrSharp.Solvers
         {
             var req = new FlareSolverrRequest
             {
-                Method = "GET",
                 Url = request.RequestUri.ToString(),
                 MaxTimeout = MaxTimeout
             };

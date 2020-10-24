@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +16,6 @@ namespace FlareSolverrSharp
     /// </summary>
     public class ClearanceHandler : DelegatingHandler
     {
-        private readonly HttpClient _client;
         private readonly FlareSolverr _flareSolverr;
 
         /// <summary>
@@ -40,13 +38,6 @@ namespace FlareSolverrSharp
         public ClearanceHandler(string flareSolverrApiUrl)
             : base(new HttpClientHandler())
         {
-            _client = new HttpClient(new HttpClientHandler
-            {
-                AllowAutoRedirect = false,
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                CookieContainer = new CookieContainer()
-            });
-
             if (!string.IsNullOrWhiteSpace(flareSolverrApiUrl))
             {
                 _flareSolverr = new FlareSolverr(flareSolverrApiUrl)
@@ -74,7 +65,7 @@ namespace FlareSolverrSharp
             if (ChallengeDetector.IsClearanceRequired(response))
             {
                 if (_flareSolverr == null)
-                    throw new FlareSolverrException("Challenge detected but FlareSolverr is not configured");
+                    throw new FlareSolverrException("Challenge detected but CloudProxy is not configured");
 
                 // Resolve the challenge using FlareSolverr API
                 var flareSolverrResponse = await _flareSolverr.Solve(request);
@@ -85,7 +76,7 @@ namespace FlareSolverrSharp
 
                 // Detect if there is a challenge in the response
                 if (ChallengeDetector.IsClearanceRequired(response))
-                    throw new FlareSolverrException("The cookies provided by FlareSolverr are not valid");
+                    throw new FlareSolverrException("The cookies provided by CloudProxy are not valid");
 
                 // Add the "Set-Cookie" header in the response with the cookies provided by FlareSolverr
                 InjectSetCookieHeader(response, flareSolverrResponse);
@@ -136,14 +127,6 @@ namespace FlareSolverrSharp
             // inject set-cookie headers in the response
             foreach (var rCookie in rCookies)
                 response.Headers.Add(HttpHeaders.SetCookie, rCookie.ToHeaderValue());
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-                _client.Dispose();
-
-            base.Dispose(disposing);
         }
 
     }
