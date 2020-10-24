@@ -35,7 +35,17 @@ namespace FlareSolverrSharp.Types
         public string SameSite;
 
         public string ToHeaderValue() => $"{Name}={Value}";
-        public System.Net.Cookie ToCookieObj() => new System.Net.Cookie(Name, Value);
-
+        public System.Net.Cookie ToCookieObj()
+        {
+            System.Net.Cookie cookie = new System.Net.Cookie(Name, Value, Path, Domain);
+            cookie.HttpOnly = HttpOnly;
+            cookie.Secure = Secure;
+            
+            //Adding this sometimes returned an expired cookie date, resulting in the cookie being expired
+            //and therefore not being used, even if it is working otherwise.
+            //cookie.Expires = DateTimeOffset.FromUnixTimeSeconds((long) Expires).DateTime;
+            
+            return cookie;
+        }
     }
 }
