@@ -12,7 +12,7 @@
     <PackageTags>cloudproxy, cloudflare, solver, bypass, protection, solving, library, cloudflaresolver, flaresolverr, flaresolver, delegatinghandler, recaptcha, captcha, javascript, challenge, utilities</PackageTags>
     <RepositoryUrl>https://github.com/JBou/CloudProxySharp</RepositoryUrl>
     <PackageProjectUrl>https://github.com/JBou/CloudProxySharp</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/JBou/CloudProxySharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
