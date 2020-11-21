@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +18,7 @@ namespace CloudProxySharp
     /// </summary>
     public class ClearanceHandler : DelegatingHandler
     {
-        private readonly CloudProxy _cloudProxy;
+        private readonly CloudProxySolver _cloudProxySolver;
 
         /// <summary>
         /// The User-Agent which will be used accross this session (null means default CloudProxy User-Agent).
@@ -27,6 +29,18 @@ namespace CloudProxySharp
         /// Max timeout to solve the challenge.
         /// </summary>
         public int MaxTimeout = 60000;
+
+        /// <summary>
+        /// If the entry is matched, the specified url is used to solve the challenge for the specified website.
+        /// This entries are prioritized over <see cref="SolveOnRootUrl"/>
+        /// </summary>
+        public readonly Dictionary<Predicate<Uri>, Func<Uri, Uri>> SolveUrlOverrides = new Dictionary<Predicate<Uri>, Func<Uri, Uri>>();
+        
+        /// <summary>
+        /// True if CloudProxySolver should solve the challenge on the root url instead of the url requested (workaround for file downloads).
+        /// www.example.com/file.pdf => resolves the challenge on => www.example.com
+        /// </summary>
+        public bool SolveOnRootUrl = false;
 
         private HttpClientHandler HttpClientHandler => InnerHandler.GetMostInnerHandler() as HttpClientHandler;
 
@@ -40,9 +54,11 @@ namespace CloudProxySharp
         {
             if (!string.IsNullOrWhiteSpace(cloudProxyApiUrl))
             {
-                _cloudProxy = new CloudProxy(cloudProxyApiUrl)
+                _cloudProxySolver = new CloudProxySolver(cloudProxyApiUrl)
                 {
-                    MaxTimeout = MaxTimeout
+                    MaxTimeout = MaxTimeout,
+                    SolveUrlOverrides = SolveUrlOverrides,
+                    SolveOnRootUrl = SolveOnRootUrl
                 };
             }
         }
@@ -64,11 +80,11 @@ namespace CloudProxySharp
             // Detect if there is a challenge in the response
             if (ChallengeDetector.IsClearanceRequired(response))
             {
-                if (_cloudProxy == null)
+                if (_cloudProxySolver == null)
                     throw new CloudProxyException("Challenge detected but CloudProxy is not configured");
 
                 // Resolve the challenge using CloudProxy API
-                var cloudProxyResponse = await _cloudProxy.Solve(request);
+                var cloudProxyResponse = await _cloudProxySolver.Solve(request);
 
                 // Change the cookies in the original request with the cookies provided by CloudProxy
                 InjectCookies(request, cloudProxyResponse);

@@ -71,7 +71,23 @@ Max timeout to solve the challenge.
 
 **MaxTimeout should be greater than 15000 (15 seconds) because starting the web browser and solving the challenge takes time.**
 
-Example: 60000
+### SolveOnRootUrl
+True if CloudProxySolver should solve the challenge on the root url instead of the url requested (workaround for file downloads).
+
+`www.example.com/file.pdf` => resolves the challenge on => `www.example.com`  
+
+### SolveUrlOverrides
+If the entry is matched, the specified url is used to solve the challenge for the specified website.
+This entries are prioritized over `SolveOnRootUrl`.
+
+**Example:**
+
+Resolves every downloads that match the pattern on the following page (needs to be a webpage without download): `https://www.hitmehard.fun/downloads/`
+
+```csharp
+handler.SolveUrlOverrides.Add(uri => new Regex(@"https?:\/\/(www.)?hitmehard.fun\/downloads\/.*?.\d+?\/download\?version=\d+")
+    .IsMatch(uri.ToString()), uri => new Uri(@"https://www.hitmehard.fun/downloads/"));
+```
 
 # Credits
 This work is based on [FlareSolverrSharp](https://github.com/ngosang/FlareSolverrSharp) by [Diego Heras (ngosang)](https://github.com/ngosang)  

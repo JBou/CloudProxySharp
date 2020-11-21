@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -10,15 +12,17 @@ using Newtonsoft.Json;
 
 namespace CloudProxySharp.Solvers
 {
-    public class CloudProxy
+    public class CloudProxySolver
     {
         private static readonly SemaphoreLocker Locker = new SemaphoreLocker();
         private HttpClient _httpClient;
         private readonly Uri _cloudProxyUri;
 
         public int MaxTimeout = 60000;
-
-        public CloudProxy(string cloudProxyApiUrl)
+        public Dictionary<Predicate<Uri>, Func<Uri, Uri>> SolveUrlOverrides = new Dictionary<Predicate<Uri>, Func<Uri, Uri>>();
+        public bool SolveOnRootUrl = false;
+        
+        public CloudProxySolver(string cloudProxyApiUrl)
         {
             var apiUrl = cloudProxyApiUrl;
             if (!apiUrl.EndsWith("/"))
@@ -37,8 +41,7 @@ namespace CloudProxySharp.Solvers
                 try
                 {
                     _httpClient = new HttpClient();
-                    var builder = new UriBuilder(originalUri) {Path = string.Empty};
-                    request.RequestUri = builder.Uri;
+                    request.RequestUri = getSolveUri(originalUri);
 
                     response = await _httpClient.PostAsync(_cloudProxyUri, GenerateCloudProxyRequest(request));
                     request.RequestUri = originalUri;
@@ -71,6 +74,24 @@ namespace CloudProxySharp.Solvers
             });
 
             return result;
+        }
+
+        private Uri getSolveUri(Uri originalUri)
+        {
+            var customSolveUrl = SolveUrlOverrides.FirstOrDefault(x => x.Key.Invoke(originalUri));
+
+            if (customSolveUrl.Value != null)
+            {
+                return customSolveUrl.Value.Invoke(originalUri);
+            }
+            
+            if (SolveOnRootUrl)
+            {
+                var builder = new UriBuilder(originalUri) {Path = string.Empty, Query = string.Empty};
+                return builder.Uri;
+            }
+
+            return originalUri;
         }
 
         private HttpContent GenerateCloudProxyRequest(HttpRequestMessage request)
