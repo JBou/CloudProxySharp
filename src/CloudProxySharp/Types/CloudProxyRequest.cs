@@ -6,7 +6,7 @@ namespace CloudProxySharp.Types
     public class CloudProxyRequest
     {
         [JsonProperty("cmd")]
-        public string Command = "request.get";
+        public string Command = "request.cookies";
 
         [JsonProperty("url")]
         public string Url;

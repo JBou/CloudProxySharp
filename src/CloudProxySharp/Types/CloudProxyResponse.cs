@@ -21,11 +21,9 @@ namespace CloudProxySharp.Types
         public string Url;
         public int Status;
         public Dictionary<string, string> Headers;
-        public string Response;
         public Cookie[] Cookies;
-        public string UserAgent;
     }
-
+    
     public class Cookie
     {
         public string Name;
@@ -53,4 +51,5 @@ namespace CloudProxySharp.Types
             return cookie;
         }
     }
+    
 }

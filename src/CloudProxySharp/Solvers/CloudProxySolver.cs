@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace CloudProxySharp.Solvers
 {
-    public class CloudProxy
+    public class CloudProxySolver
     {
         private static readonly SemaphoreLocker Locker = new SemaphoreLocker();
         private HttpClient _httpClient;
@@ -18,7 +18,7 @@ namespace CloudProxySharp.Solvers
 
         public int MaxTimeout = 60000;
 
-        public CloudProxy(string cloudProxyApiUrl)
+        public CloudProxySolver(string cloudProxyApiUrl)
         {
             var apiUrl = cloudProxyApiUrl;
             if (!apiUrl.EndsWith("/"))
@@ -29,7 +29,6 @@ namespace CloudProxySharp.Solvers
         public async Task<CloudProxyResponse> Solve(HttpRequestMessage request)
         {
             CloudProxyResponse result = null;
-            Uri originalUri = request.RequestUri;
 
             await Locker.LockAsync(async () =>
             {
@@ -37,11 +36,7 @@ namespace CloudProxySharp.Solvers
                 try
                 {
                     _httpClient = new HttpClient();
-                    var builder = new UriBuilder(originalUri) {Path = string.Empty};
-                    request.RequestUri = builder.Uri;
-
                     response = await _httpClient.PostAsync(_cloudProxyUri, GenerateCloudProxyRequest(request));
-                    request.RequestUri = originalUri;
                 }
                 catch (HttpRequestException e)
                 {
