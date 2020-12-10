@@ -42,7 +42,7 @@ namespace CloudProxySharp.Tests
         [TestMethod]
         public async Task SolveOkUserAgent()
         {
-            const string userAgent = "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0";
+            const string userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36";
             var uri = new Uri("https://www.google.com/");
             var cloudProxy = new CloudProxySolver(Settings.CloudProxyApiUrl);
             var request = new HttpRequestMessage(HttpMethod.Get, uri);

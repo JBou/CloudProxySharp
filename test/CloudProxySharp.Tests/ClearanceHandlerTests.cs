@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -14,7 +13,9 @@ namespace CloudProxySharp.Tests
     public class ClearanceHandlerTests
     {
         private readonly Uri _protectedUri = new Uri("https://iptvm3ulist.com/");
+
         private readonly Uri _protectedDownloadUri = new Uri("https://iptvm3ulist.com/m3u/de01_iptvm3ulist_com_211120.m3u");
+
         private readonly Uri _protectedDownloadUri2 = new Uri("https://www.spigotmc.org/resources/hubkick.2/download?version=203285");
 
         [TestMethod]
@@ -37,7 +38,7 @@ namespace CloudProxySharp.Tests
         {
             var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
-                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
                 MaxTimeout = 60000
             };
 
@@ -51,7 +52,7 @@ namespace CloudProxySharp.Tests
         {
             var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
-                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
                 MaxTimeout = 60000
             };
 
@@ -65,7 +66,7 @@ namespace CloudProxySharp.Tests
         {
             var handler = new ClearanceHandler(Settings.CloudProxyApiUrl)
             {
-                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36",
+                UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36",
                 MaxTimeout = 60000,
             };
 
@@ -73,7 +74,7 @@ namespace CloudProxySharp.Tests
             var response = await client.GetAsync(_protectedDownloadUri2);
             Assert.AreEqual(MediaTypeHeaderValue.Parse("application/octet-stream"), response.Content.Headers.ContentType);
         }
-        
+
         [TestMethod]
         public async Task SolveError()
         {
@@ -94,7 +95,7 @@ namespace CloudProxySharp.Tests
             {
                 Assert.IsNotNull(e.InnerException);
                 Assert.IsInstanceOfType(e.InnerException, typeof(SocketException));
-                Assert.AreEqual(SocketError.HostNotFound, ((SocketException)e.InnerException).SocketErrorCode);
+                Assert.AreEqual(SocketError.HostNotFound, ((SocketException) e.InnerException).SocketErrorCode);
             }
             catch (Exception e)
             {
@@ -126,7 +127,7 @@ namespace CloudProxySharp.Tests
                 Assert.Fail("Unexpected exception: " + e);
             }
         }
- 
+
         [TestMethod]
         public async Task SolveErrorNoConfig()
         {
@@ -151,6 +152,5 @@ namespace CloudProxySharp.Tests
                 Assert.Fail("Unexpected exception: " + e);
             }
         }
-
     }
 }
