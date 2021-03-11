@@ -17,6 +17,7 @@ namespace CloudProxySharp.Solvers
         private readonly Uri _cloudProxyUri;
 
         public int MaxTimeout = 60000;
+        public string Proxy;
 
         public CloudProxySolver(string cloudProxyApiUrl)
         {
@@ -73,7 +74,8 @@ namespace CloudProxySharp.Solvers
             var req = new CloudProxyRequest
             {
                 Url = request.RequestUri.ToString(),
-                MaxTimeout = MaxTimeout
+                MaxTimeout = MaxTimeout,
+                Proxy = Proxy
             };
 
             var userAgent = request.Headers.UserAgent.ToString();

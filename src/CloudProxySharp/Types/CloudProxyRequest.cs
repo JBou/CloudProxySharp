@@ -16,6 +16,9 @@ namespace CloudProxySharp.Types
 
         [JsonProperty("maxTimeout")]
         public int MaxTimeout;
+
+        [JsonProperty("proxy", NullValueHandling = NullValueHandling.Ignore)]
+        public string Proxy;
         
         [JsonProperty("headers")]
         public Dictionary<string, string> Headers;

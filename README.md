@@ -73,6 +73,14 @@ Max timeout to solve the challenge.
 
 Example: 60000
 
+### Proxy
+Proxy server to use for solving the challenge.  
+
+More information and examples can be found [here](https://www.chromium.org/developers/design-documents/network-settings).
+
+Examples: `192.168.1.1`, `proxy.com`, `example.com:80`
+
+
 # Credits
 This work is based on [FlareSolverrSharp](https://github.com/ngosang/FlareSolverrSharp) by [Diego Heras (ngosang)](https://github.com/ngosang)  
 Huge thanks go out to him!

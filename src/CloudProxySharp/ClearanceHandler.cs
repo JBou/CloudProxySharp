@@ -19,7 +19,7 @@ namespace CloudProxySharp
         private readonly CloudProxySolver _cloudProxySolver;
 
         /// <summary>
-        /// The User-Agent which will be used accross this session (null means default CloudProxy User-Agent).
+        /// The User-Agent which will be used across this session (null means default CloudProxy User-Agent).
         /// </summary>
         public string UserAgent = null;
 
@@ -27,6 +27,13 @@ namespace CloudProxySharp
         /// Max timeout to solve the challenge.
         /// </summary>
         public int MaxTimeout = 60000;
+
+        /// <summary>
+        /// Proxy server to use for solving the challenge.
+        /// More information: <a href="https://www.chromium.org/developers/design-documents/network-settings">
+        /// https://www.chromium.org/developers/design-documents/network-settings</a>
+        /// </summary>
+        public string Proxy;
 
         private HttpClientHandler HttpClientHandler => InnerHandler.GetMostInnerHandler() as HttpClientHandler;
 
@@ -42,7 +49,8 @@ namespace CloudProxySharp
             {
                 _cloudProxySolver = new CloudProxySolver(cloudProxyApiUrl)
                 {
-                    MaxTimeout = MaxTimeout
+                    MaxTimeout = MaxTimeout,
+                    Proxy = Proxy
                 };
             }
         }
